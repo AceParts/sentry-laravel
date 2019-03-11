@@ -3,7 +3,6 @@
 namespace Sentry\Laravel\Tests;
 
 use Sentry\State\Hub;
-use Illuminate\Support\Arr;
 
 class SqlBindingsInBreadcrumbsTest extends SentryLaravelTestCase
 {
@@ -38,8 +37,10 @@ class SqlBindingsInBreadcrumbsTest extends SentryLaravelTestCase
             'test',
         ]);
 
+        $breadcrumbs = $this->getScope(Hub::getCurrent())->getBreadcrumbs();
+
         /** @var \Sentry\Breadcrumb $lastBreadcrumb */
-        $lastBreadcrumb = Arr::last($this->getScope(Hub::getCurrent())->getBreadcrumbs());
+        $lastBreadcrumb = end($breadcrumbs);
 
         $this->assertEquals($query, $lastBreadcrumb->getMessage());
         $this->assertEquals($bindings, $lastBreadcrumb->getMetadata()['bindings']);
@@ -63,8 +64,10 @@ class SqlBindingsInBreadcrumbsTest extends SentryLaravelTestCase
             'test',
         ]);
 
+        $breadcrumbs = $this->getScope(Hub::getCurrent())->getBreadcrumbs();
+
         /** @var \Sentry\Breadcrumb $lastBreadcrumb */
-        $lastBreadcrumb = Arr::last($this->getScope(Hub::getCurrent())->getBreadcrumbs());
+        $lastBreadcrumb = end($breadcrumbs);
 
         $this->assertEquals($query, $lastBreadcrumb->getMessage());
         $this->assertFalse(isset($lastBreadcrumb->getMetadata()['bindings']));
