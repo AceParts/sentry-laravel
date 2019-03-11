@@ -31,7 +31,7 @@ class SqlBindingsInBreadcrumbsTest extends SentryLaravelTestCase
 
         $this->assertTrue($this->app['config']->get('sentry.breadcrumbs.sql_bindings'));
 
-        $this->app['events']->dispatch('illuminate.query', [
+        $this->dispatchLaravelEvent('illuminate.query', [
             $query = 'SELECT * FROM breadcrumbs WHERE bindings = ?;',
             $bindings = ['1'],
             10,
@@ -56,7 +56,7 @@ class SqlBindingsInBreadcrumbsTest extends SentryLaravelTestCase
 
         $this->assertFalse($this->app['config']->get('sentry.breadcrumbs.sql_bindings'));
 
-        $this->app['events']->dispatch('illuminate.query', [
+        $this->dispatchLaravelEvent('illuminate.query', [
             $query = 'SELECT * FROM breadcrumbs WHERE bindings <> ?;',
             $bindings = ['1'],
             10,
